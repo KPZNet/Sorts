@@ -1,6 +1,8 @@
 import random
+import time
 
 class Sorter:
+
     def bubble_sort(self, array) :
         n = len ( array )
         for i in range ( n ) :
@@ -55,11 +57,21 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-rand_array = [random.randint(0,1000) for i in range(40)]
-sorted_rand_array_is = s.insertion_sort(rand_array)
-sorted_rand_array_ms = s.merge_sort(rand_array)
-sorted_rand_array_bs = s.bubble_sort(rand_array)
+rand_array = [random.randint(0,10000) for i in range(10000)]
 
-print(sorted_rand_array_bs)
-print(sorted_rand_array_ms)
-print(sorted_rand_array_is)
+
+start_time_bs = time.perf_counter()
+sorted_rand_array_bs = s.bubble_sort(rand_array)
+stop_time_bs = time.perf_counter()
+
+start_time_ms = time.perf_counter()
+sorted_rand_array_ms = s.merge_sort(rand_array)
+stop_time_ms = time.perf_counter()
+
+start_time_is = time.perf_counter()
+sorted_rand_array_is = s.insertion_sort(rand_array)
+stop_time_is = time.perf_counter()
+
+print(f"Bubble Sort: {stop_time_bs - start_time_bs:0.4f} seconds")
+print(f"Merge Sort: {stop_time_ms - start_time_ms:0.4f} seconds")
+print(f"Insertion Sort: {stop_time_is - start_time_is:0.4f} seconds")
