@@ -1,6 +1,31 @@
 import random
 
 class Sorter:
+    def bubble_sort(self, array) :
+        n = len ( array )
+        for i in range ( n ) :
+            # Create a flag that will allow the function to
+            # terminate early if there's nothing left to sort
+            already_sorted = True
+            # Start looking at each item of the list one by one,
+            # comparing it with its adjacent value. With each
+            # iteration, the portion of the array that you look at
+            # shrinks because the remaining items have already been
+            # sorted.
+            for j in range ( n - i - 1 ) :
+                if array[j] > array[j + 1] :
+                    # If the item you're looking at is greater than its
+                    # adjacent value, then swap them
+                    array[j], array[j + 1] = array[j + 1], array[j]
+                    # Since you had to swap two elements,
+                    # set the `already_sorted` flag to `False` so the
+                    # algorithm doesn't finish prematurely
+                    already_sorted = False
+            # If there were no swaps during the last iteration,
+            # the array is already sorted, and you can terminate
+            if already_sorted :
+                break
+        return array
 
     def merge(self, left, right) :
         # If the first array is empty, then nothing needs
@@ -77,10 +102,11 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-rand_array = [random.randint(0,1000) for i in range(20)]
+rand_array = [random.randint(0,1000) for i in range(40)]
 sorted_rand_array_is = s.insertion_sort(rand_array)
 sorted_rand_array_ms = s.merge_sort(rand_array)
+sorted_rand_array_bs = s.bubble_sort(rand_array)
 
+print(sorted_rand_array_bs)
 print(sorted_rand_array_ms)
-
 print(sorted_rand_array_is)
