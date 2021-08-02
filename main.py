@@ -82,4 +82,5 @@ sorted_rand_array_is = s.insertion_sort(rand_array)
 sorted_rand_array_ms = s.merge_sort(rand_array)
 
 print(sorted_rand_array_ms)
+
 print(sorted_rand_array_is)
