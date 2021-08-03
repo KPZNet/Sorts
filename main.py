@@ -1,12 +1,25 @@
 import random
 import time
+import matplotlib.pyplot as plt
 
 class Sorter:
+
+    def plot_bar_graph(self, x):
+        sx = len ( x )
+        y =  [str(i) for i in range(sx)]
+        sy = len(y)
+        plt.bar (x,y)
+        plt.title ( 'Sort' )
+        plt.xlabel ( 'X' )
+        plt.ylabel ( 'Y' )
+        plt.show ()
+
 
     def bubble_sort(self, array) :
         n = len ( array )
         for i in range ( n ) :
             already_sorted = True
+            self.plot_bar_graph(array)
             for j in range ( n - i - 1 ) :
                 if array[j] > array[j + 1] :
                     array[j], array[j + 1] = array[j + 1], array[j]
@@ -57,11 +70,11 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-rand_array = [random.randint(0,10000) for i in range(1000)]
+rand_array = [random.randint(0,100) for i in range(100)]
 
 
 start_time_bs = time.perf_counter()
-#sorted_rand_array_bs = s.bubble_sort(rand_array)
+sorted_rand_array_bs = s.bubble_sort(rand_array)
 stop_time_bs = time.perf_counter()
 
 start_time_ms = time.perf_counter()
