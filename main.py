@@ -19,10 +19,7 @@ class Sorter:
                 if array[j] > array[j + 1] :
                     array[j], array[j + 1] = array[j + 1], array[j]
 
-                    plt.clf()
-                    plt.bar ( y, array )
-                    plt.draw()
-                    plt.pause(0.00001)
+                    self.update_plot(plt, array, y)
                     
                     already_sorted = False
             if already_sorted :
@@ -73,13 +70,16 @@ class Sorter:
                 array[j + 1] = array[j]
                 j -= 1
 
-                plt.clf()
-                plt.bar ( y, array )
-                plt.draw()
-                plt.pause(0.00001)
+                self.update_plot(plt, array, y)
 
             array[j + 1] = key_item
         return array
+
+    def update_plot(self, plt, array, y):
+        plt.clf()
+        plt.bar ( y, array )
+        plt.draw()
+        plt.pause(0.00001)
 
 print("Sort Comparisons")
 s = Sorter()
