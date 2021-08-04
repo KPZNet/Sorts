@@ -27,6 +27,7 @@ class Sorter:
                     already_sorted = False
             if already_sorted :
                 break
+        plt.close()
         return array
 
     def merge(self, left, right) :
@@ -86,19 +87,18 @@ s = Sorter()
 
 
 rand_array = [random.randint(0,100) for i in range(20)]
-
-
-
 start_time_bs = time.perf_counter()
-#sorted_rand_array_bs = s.bubble_sort(rand_array)
+sorted_rand_array_bs = s.bubble_sort(rand_array)
 stop_time_bs = time.perf_counter()
 
+rand_array = [random.randint(0,100) for i in range(20)]
 start_time_ms = time.perf_counter()
-sorted_rand_array_ms = s.merge_sort(rand_array)
+#sorted_rand_array_ms = s.merge_sort(rand_array)
 stop_time_ms = time.perf_counter()
 
+rand_array = [random.randint(0,100) for i in range(20)]
 start_time_is = time.perf_counter()
-#sorted_rand_array_is = s.insertion_sort(rand_array)
+sorted_rand_array_is = s.insertion_sort(rand_array)
 stop_time_is = time.perf_counter()
 
 #print(f"Bubble Sort: {stop_time_bs - start_time_bs:0.4f} seconds")
