@@ -174,18 +174,19 @@ def sort_run(fn, rand_arrays, runs):
     for rand_array in rand_arrays:
         run_list = []
         for j in range(runs):
+            rand_array_copy = rand_array.copy()
             start_time = time.perf_counter_ns()
-            sorted_rand_array = fn(rand_array)
+            sorted_rand_array = fn(rand_array_copy)
             stop_time = time.perf_counter_ns()
             test_time = (stop_time - start_time) / NANO_TO_MS
             run_list.append(test_time)
-        run_list_clean = remove_outliers_z_score(run_list, 3)
+        run_list_clean = remove_outliers_z_score(run_list, 30)
         test_time = statistics.mean(run_list_clean)
         sorted_array_test_times.append(test_time)
     return sorted_array_test_times
 
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
-sorted_array_test_times = sort_run(s.insertion_sort, rand_arrays, 50)
+sorted_array_test_times = sort_run(s.bubble_sort, rand_arrays, 20)
     
 plot_test_times(sorted_array_test_times, array_sizes )
 exit(0)
