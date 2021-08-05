@@ -122,29 +122,60 @@ class Sorter:
         plt.bar ( y, array )
         plt.draw()
         plt.pause(0.00001)
+    
+
+
 
 print("Sort Comparisons")
 s = Sorter()
 
+BASE_SIZE = 1000
+LOOP_SIZE = 10
 
-ARRAY_SIZE = 8000
+def plot_test_times( test_times, array_sizes):
+    plt.plot (array_sizes, test_times )
+    plt.show()
 
-rand_array = [random.randint(0,100) for i in range(ARRAY_SIZE)]
+def make_random_arrays(BASE_SIZE, LOOP_SIZE):
+    array_sizes = []
+    rand_arrays = []
+    for i in range(1,1+LOOP_SIZE):
+        test_size = BASE_SIZE * (i)
+        array_sizes.append(test_size)
+        rand_array = [random.randint(0,test_size) for i in range(test_size)]
+        rand_arrays.append(rand_array)
+    return rand_arrays, array_sizes
+
+def sort_run(fn, rand_arrays):
+    sorted_array_test_times = []
+    for rand_array in rand_arrays:
+        start_time = time.perf_counter()
+        sorted_rand_array = fn(rand_array)
+        stop_time = time.perf_counter()
+        test_time = (stop_time - start_time)
+        sorted_array_test_times.append(test_time)
+    return sorted_array_test_times
+
+rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
+sorted_array_test_times = sort_run(s.quick_sort, rand_arrays)
+    
+plot_test_times(sorted_array_test_times, array_sizes )
+exit(0)
+
+
+rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
 start_time_bs = time.perf_counter()
 sorted_rand_array_bs = s.bubble_sort(rand_array)
 stop_time_bs = time.perf_counter()
 
-rand_array = [random.randint(0,100) for i in range(ARRAY_SIZE)]
-start_time_ms = time.perf_counter()
-sorted_rand_array_ms = s.merge_sort(rand_array)
-stop_time_ms = time.perf_counter()
 
-rand_array = [random.randint(0,100) for i in range(ARRAY_SIZE)]
+    
+rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
 start_time_qs = time.perf_counter()
 sorted_rand_array_qs = s.quick_sort(rand_array)
 stop_time_qs = time.perf_counter()
 
-rand_array = [random.randint(0,100) for i in range(ARRAY_SIZE)]
+rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
 start_time_is = time.perf_counter()
 sorted_rand_array_is = s.insertion_sort(rand_array)
 stop_time_is = time.perf_counter()
