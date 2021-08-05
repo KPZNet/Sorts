@@ -6,11 +6,17 @@ import statistics
 import pandas as pd 
 import scipy.stats as stats
 
+class SortType:
+    def __init__(self, _name_type = "none", _sort_times =[]):
+        self.name_type = _name_type
+        self.sort_times = _sort_times
+    
+
+
 class Sorter:
 
     def __init__(self, plot_sort = False):  
         self.PLOT_SORT = plot_sort
-
 
     def bubble_sort(self, array) :
 
@@ -131,10 +137,11 @@ class Sorter:
 print("Sort Comparisons")
 s = Sorter()
 
-BASE_SIZE = 1000
+BASE_SIZE = 100
 LOOP_SIZE = 10
-
 NANO_TO_MS = 1000000
+NUM_AVERAGES = 2
+OUTLIER_Z_SCORE = 3
 
 def remove_outliers_z_score(data, z_score):
     #find absolute value of z-score for each observation
@@ -180,34 +187,33 @@ def sort_run(fn, rand_arrays, runs):
             stop_time = time.perf_counter_ns()
             test_time = (stop_time - start_time) / NANO_TO_MS
             run_list.append(test_time)
-        run_list_clean = remove_outliers_z_score(run_list, 30)
+        run_list_clean = remove_outliers_z_score(run_list, OUTLIER_Z_SCORE)
         test_time = statistics.mean(run_list_clean)
         sorted_array_test_times.append(test_time)
     return sorted_array_test_times
 
+sorted_array_test_times = []
+
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
-sorted_array_test_times = sort_run(s.bubble_sort, rand_arrays, 1)
-    
-plot_test_times(sorted_array_test_times, array_sizes )
+sorted_array_test_times_bubble = sort_run(s.bubble_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_merge = sort_run(s.merge_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_insert = sort_run(s.insertion_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
+
+sort_times_df = pd.DataFrame( { "bubble": sorted_array_test_times_bubble,
+                "merge":sorted_array_test_times_merge,
+                "insert":sorted_array_test_times_insert,
+                "quick":sorted_array_test_times_quick})
+
+plt.plot(sort_times_df['bubble'], label='bubble', color='red')
+plt.plot(sort_times_df['merge'], label='merge', color='steelblue')
+plt.plot(sort_times_df['insert'], label='insert', color='purple')
+plt.plot(sort_times_df['quick'], label='quick', color='orange')
+plt.legend()
+plt.ylabel('Milliseconds')
+plt.xlabel('Array Size')
+plt.title('Sorting Times')
+plt.show()
 exit(0)
 
 
-rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
-start_time_bs = time.perf_counter()
-sorted_rand_array_bs = s.bubble_sort(rand_array)
-stop_time_bs = time.perf_counter()
-    
-rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
-start_time_qs = time.perf_counter()
-sorted_rand_array_qs = s.quick_sort(rand_array)
-stop_time_qs = time.perf_counter()
-
-rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
-start_time_is = time.perf_counter()
-sorted_rand_array_is = s.insertion_sort(rand_array)
-stop_time_is = time.perf_counter()
-
-print(f"Bubble Sort: {stop_time_bs - start_time_bs:0.4f} seconds")
-print(f"Merge Sort: {stop_time_ms - start_time_ms:0.4f} seconds")
-print(f"Insertion Sort: {stop_time_is - start_time_is:0.4f} seconds")
-print(f"Quick Sort: {stop_time_qs - start_time_qs:0.4f} seconds")
