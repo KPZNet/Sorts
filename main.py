@@ -12,18 +12,9 @@ class SortType:
         self.sort_times = _sort_times
     
 
-
 class Sorter:
 
-    def __init__(self, plot_sort = False):  
-        self.PLOT_SORT = plot_sort
-
     def bubble_sort(self, array) :
-
-        if self.PLOT_SORT: 
-            y = [str ( i ) for i in range ( len ( array ) )]      
-            plt.ion()
-
         
         n = len ( array )
         for i in range ( n ) :
@@ -32,9 +23,6 @@ class Sorter:
             for j in range ( n - i - 1 ) :
                 if array[j] > array[j + 1] :
                     array[j], array[j + 1] = array[j + 1], array[j]
-
-                    if self.PLOT_SORT:
-                        self.update_plot(plt, array, y)
                 
                     already_sorted = False
             if already_sorted :
@@ -73,25 +61,18 @@ class Sorter:
             right= self.merge_sort ( array[midpoint :] ) )
 
     def insertion_sort(self, array):
-            
-        if self.PLOT_SORT:
-            y = [str ( i ) for i in range ( len ( array ) )]
-            plt.ion()
-        
+                    
         for i in range(1, len(array)):
             key_item = array[i]
             j = i - 1
             while j >= 0 and array[j] > key_item:
                 array[j + 1] = array[j]
                 j -= 1
-                if self.PLOT_SORT:
-                    self.update_plot(plt, array, y)
-
             array[j + 1] = key_item
         return array
 
 
-    def partition(self, arr, low, high):
+    def quick_sort_partition(self, arr, low, high):
         i = (low-1)		 # index of smaller element
         pivot = arr[high]	 # pivot
 
@@ -108,23 +89,24 @@ class Sorter:
         arr[i+1], arr[high] = arr[high], arr[i+1]
         return (i+1)
 
-    def quickSort(self, arr, low, high):
+    def quick_sort_in_place(self, arr, low, high):
         if len(arr) == 1:
             return arr
         if low < high:
 
             # pi is partitioning index, arr[p] is now
             # at right place
-            pi = self.partition(arr, low, high)
+            pi = self.quick_sort_partition(arr, low, high)
 
             # Separately sort elements before
             # partition and after partition
-            self.quickSort(arr, low, pi-1)
-            self.quickSort(arr, pi+1, high)
+            self.quick_sort_in_place(arr, low, pi-1)
+            self.quick_sort_in_place(arr, pi+1, high)
 
     def quick_sort(self, array):
         n = len(array)
-        self.quickSort(array, 0, n-1)
+        self.quick_sort_in_place(array, 0, n-1)
+        return array
 
     def update_plot(self, plt, array, y):
         plt.clf()
@@ -133,6 +115,65 @@ class Sorter:
         plt.pause(0.00001)
     
 
+    # Function to perform the insertion sort
+    def hybrid_insertion_sort(self, arr, low, n):
+        for i in range(low + 1, n + 1):
+            val = arr[i]
+            j = i
+            while j>low and arr[j-1]>val:
+                arr[j]= arr[j-1]
+                j-= 1
+            arr[j]= val
+
+    # The following two functions are used
+    # to perform quicksort hybrid on the array.
+
+    # Partition function for quicksort
+    def hybrid_partition(self, arr, low, high):
+        pivot = arr[high]
+        i = j = low
+        for i in range(low, high):
+            if arr[i]<pivot:
+                arr[i], arr[j]= arr[j], arr[i]
+                j+= 1
+        arr[j], arr[high]= arr[high], arr[j]
+        return j
+
+    # Hybrid function -> Quick + Insertion sort
+    def hybrid_quick_sort_in_place(self, arr, low, high):
+        while low<high:
+
+            # If the size of the array is less
+            # than threshold apply insertion sort
+            # and stop recursion
+            if high-low + 1<10:
+                self.hybrid_insertion_sort(arr, low, high)
+                break
+
+            else:
+                pivot = self.hybrid_partition(arr, low, high)
+
+                # Optimised quicksort which works on
+                # the smaller arrays first
+
+                # If the left side of the pivot
+                # is less than right, sort left part
+                # and move to the right part of the array
+                if pivot-low<high-pivot:
+                    self.hybrid_quick_sort_in_place(arr, low, pivot-1)
+                    low = pivot + 1
+                else:
+                    # If the right side of pivot is less
+                    # than left, sort right side and
+                    # move to the left side
+                    self.hybrid_quick_sort_in_place(arr, pivot + 1, high)
+                    high = pivot-1
+
+    def hybrid_quick_sort(self, array):
+        n = len(array)
+        self.hybrid_quick_sort_in_place(array, 0, n-1)
+        return array
+
 
 print("Sort Comparisons")
 s = Sorter()
@@ -140,7 +181,7 @@ s = Sorter()
 BASE_SIZE = 100
 LOOP_SIZE = 10
 NANO_TO_MS = 1000000
-NUM_AVERAGES = 2
+NUM_AVERAGES = 10
 OUTLIER_Z_SCORE = 3
 
 def remove_outliers_z_score(data, z_score):
@@ -199,16 +240,22 @@ sorted_array_test_times_bubble = sort_run(s.bubble_sort, rand_arrays, NUM_AVERAG
 sorted_array_test_times_merge = sort_run(s.merge_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_insert = sort_run(s.insertion_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_quick_hybrid = sort_run(s.hybrid_quick_sort, rand_arrays, NUM_AVERAGES)
 
-sort_times_df = pd.DataFrame( { "bubble": sorted_array_test_times_bubble,
+sort_times_df = pd.DataFrame( { 
+                "bubble": sorted_array_test_times_bubble,
                 "merge":sorted_array_test_times_merge,
                 "insert":sorted_array_test_times_insert,
-                "quick":sorted_array_test_times_quick})
+                "quick":sorted_array_test_times_quick,
+                "hybrid quick" : sorted_array_test_times_quick_hybrid 
+                } )
 
-plt.plot(sort_times_df['bubble'], label='bubble', color='red')
-plt.plot(sort_times_df['merge'], label='merge', color='steelblue')
-plt.plot(sort_times_df['insert'], label='insert', color='purple')
-plt.plot(sort_times_df['quick'], label='quick', color='orange')
+plt.plot(array_sizes, sort_times_df['bubble'], label='bubble', color='red')
+plt.plot(array_sizes, sort_times_df['merge'], label='merge', color='steelblue')
+plt.plot(array_sizes, sort_times_df['insert'], label='insert', color='purple')
+plt.plot(array_sizes, sort_times_df['quick'], label='quick', color='orange')
+plt.plot(array_sizes, sort_times_df['hybrid quick'], label='quick hybrid', color='green')
 plt.legend()
 plt.ylabel('Milliseconds')
 plt.xlabel('Array Size')
