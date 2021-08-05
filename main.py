@@ -140,9 +140,11 @@ def remove_outliers_z_score(data, z_score):
     #find absolute value of z-score for each observation
     z = np.abs(stats.zscore(data))
     #only keep rows in dataframe with all z-scores less than absolute value of 3 
-    #data_clean = data[(z<z_score).all(axis=1)]    
-    data_clean = filter(lambda score: score < z_score, data)
-    return data_clean
+    clean_data = []
+    for i in range( len(z) ):
+        if z[i] >= z_score:
+            data.pop(i)
+    return data
 
 def remove_outliers_inner_quartile(data):
     #find Q1, Q3, and interquartile range for each column
@@ -193,8 +195,6 @@ rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
 start_time_bs = time.perf_counter()
 sorted_rand_array_bs = s.bubble_sort(rand_array)
 stop_time_bs = time.perf_counter()
-
-
     
 rand_array = [random.randint(0,100) for i in range(BASE_SIZE)]
 start_time_qs = time.perf_counter()
