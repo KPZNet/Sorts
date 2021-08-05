@@ -2,6 +2,9 @@ import random
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import statistics
+import pandas as pd 
+import scipy.stats as stats
 
 class Sorter:
 
@@ -125,12 +128,30 @@ class Sorter:
     
 
 
-
 print("Sort Comparisons")
 s = Sorter()
 
-BASE_SIZE = 1000
+BASE_SIZE = 100
 LOOP_SIZE = 10
+
+NANO_TO_MS = 1000000
+
+def remove_outliers_z_score(data, z_score):
+    #find absolute value of z-score for each observation
+    z = np.abs(stats.zscore(data))
+    #only keep rows in dataframe with all z-scores less than absolute value of 3 
+    #data_clean = data[(z<z_score).all(axis=1)]    
+    data_clean = filter(lambda score: score < z_score, data)
+    return data_clean
+
+def remove_outliers_inner_quartile(data):
+    #find Q1, Q3, and interquartile range for each column
+    Q1 = data.quantile(q=.25)
+    Q3 = data.quantile(q=.75)
+    IQR = data.apply(stats.iqr)
+    #only keep rows in dataframe that have values within 1.5*IQR of Q1 and Q3
+    data_clean = data[~((data < (Q1-1.5*IQR)) | (data > (Q3+1.5*IQR))).any(axis=1)]
+    return data_clean
 
 def plot_test_times( test_times, array_sizes):
     plt.plot (array_sizes, test_times )
@@ -146,18 +167,23 @@ def make_random_arrays(BASE_SIZE, LOOP_SIZE):
         rand_arrays.append(rand_array)
     return rand_arrays, array_sizes
 
-def sort_run(fn, rand_arrays):
+def sort_run(fn, rand_arrays, runs):
     sorted_array_test_times = []
     for rand_array in rand_arrays:
-        start_time = time.perf_counter()
-        sorted_rand_array = fn(rand_array)
-        stop_time = time.perf_counter()
-        test_time = (stop_time - start_time)
+        run_list = []
+        for j in range(runs):
+            start_time = time.perf_counter_ns()
+            sorted_rand_array = fn(rand_array)
+            stop_time = time.perf_counter_ns()
+            test_time = (stop_time - start_time) / NANO_TO_MS
+            run_list.append(test_time)
+        run_list_clean = remove_outliers_z_score(run_list, 3)
+        test_time = statistics.mean(run_list_clean)
         sorted_array_test_times.append(test_time)
     return sorted_array_test_times
 
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
-sorted_array_test_times = sort_run(s.quick_sort, rand_arrays)
+sorted_array_test_times = sort_run(s.insertion_sort, rand_arrays, 50)
     
 plot_test_times(sorted_array_test_times, array_sizes )
 exit(0)
