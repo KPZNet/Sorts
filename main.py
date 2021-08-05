@@ -178,11 +178,11 @@ class Sorter:
 print("Sort Comparisons")
 s = Sorter()
 
-BASE_SIZE = 100
+BASE_SIZE = 1000
 LOOP_SIZE = 10
 NANO_TO_MS = 1000000
-NUM_AVERAGES = 10
-OUTLIER_Z_SCORE = 3
+NUM_AVERAGES = 5
+OUTLIER_Z_SCORE = 66
 
 def remove_outliers_z_score(data, z_score):
     #find absolute value of z-score for each observation
@@ -190,9 +190,9 @@ def remove_outliers_z_score(data, z_score):
     #only keep rows in dataframe with all z-scores less than absolute value of 3 
     clean_data = []
     for i in range( len(z) ):
-        if z[i] >= z_score:
-            data.pop(i)
-    return data
+        if z[i] < z_score:
+            clean_data.append(data[i])
+    return clean_data
 
 def remove_outliers_inner_quartile(data):
     #find Q1, Q3, and interquartile range for each column
@@ -236,22 +236,22 @@ def sort_run(fn, rand_arrays, runs):
 sorted_array_test_times = []
 
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
-sorted_array_test_times_bubble = sort_run(s.bubble_sort, rand_arrays, NUM_AVERAGES)
+#sorted_array_test_times_bubble = sort_run(s.bubble_sort, rand_arrays, NUM_AVERAGES)
+print("S")
 sorted_array_test_times_merge = sort_run(s.merge_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_insert = sort_run(s.insertion_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick_hybrid = sort_run(s.hybrid_quick_sort, rand_arrays, NUM_AVERAGES)
 
-sort_times_df = pd.DataFrame( { 
-                "bubble": sorted_array_test_times_bubble,
-                "merge":sorted_array_test_times_merge,
-                "insert":sorted_array_test_times_insert,
-                "quick":sorted_array_test_times_quick,
-                "hybrid quick" : sorted_array_test_times_quick_hybrid 
-                } )
+sort_times_df = pd.DataFrame()
+#sort_times_df['bubble'] = sorted_array_test_times_bubble
+sort_times_df['merge'] = sorted_array_test_times_merge
+sort_times_df['insert'] = sorted_array_test_times_insert
+sort_times_df['quick'] = sorted_array_test_times_quick
+sort_times_df['hybrid quick'] = sorted_array_test_times_quick_hybrid
 
-plt.plot(array_sizes, sort_times_df['bubble'], label='bubble', color='red')
+#plt.plot(array_sizes, sort_times_df['bubble'], label='bubble', color='red')
 plt.plot(array_sizes, sort_times_df['merge'], label='merge', color='steelblue')
 plt.plot(array_sizes, sort_times_df['insert'], label='insert', color='purple')
 plt.plot(array_sizes, sort_times_df['quick'], label='quick', color='orange')
