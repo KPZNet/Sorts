@@ -131,7 +131,7 @@ class Sorter:
 print("Sort Comparisons")
 s = Sorter()
 
-BASE_SIZE = 100
+BASE_SIZE = 1000
 LOOP_SIZE = 10
 
 NANO_TO_MS = 1000000
@@ -186,7 +186,7 @@ def sort_run(fn, rand_arrays, runs):
     return sorted_array_test_times
 
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
-sorted_array_test_times = sort_run(s.bubble_sort, rand_arrays, 20)
+sorted_array_test_times = sort_run(s.bubble_sort, rand_arrays, 1)
     
 plot_test_times(sorted_array_test_times, array_sizes )
 exit(0)
