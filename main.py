@@ -53,7 +53,7 @@ class Sorter:
         sorted_array_test_times_insert = self.sort_run(InsertionSort(), rand_arrays, num_averages)
         sorted_array_test_times_merge = self.sort_run(MergeSort(), rand_arrays, num_averages)
         sorted_array_test_times_quick = self.sort_run(QuickSort(), rand_arrays, num_averages)
-        sorted_array_test_times_quick_hybrid = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages)
+        sorted_array_test_times_quick_hybrid = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages, 10)
 
         sort_times_df = pd.DataFrame()
         sort_times_df['bubble'] = sorted_array_test_times_bubble
