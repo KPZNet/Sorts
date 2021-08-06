@@ -14,12 +14,6 @@ from quicksort import QuickSort
 
 NANO_TO_MS = 1000000
 
-class SortType:
-    def __init__(self, _name_type = "none", _sort_times =[]):
-        self.name_type = _name_type
-        self.sort_times = _sort_times
-    
-
 class Sorter:
 
     def __init__(self):
@@ -124,7 +118,7 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-#s.run_sort_comparison(1000, 5, 5)
+s.run_sort_comparison(1000, 5, 5)
 s.run_quick_sort_comparison(1000, 5, 5)
 
 
