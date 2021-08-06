@@ -146,11 +146,3 @@ s.run_quick_sort_comparison(1000, 5, 5)
 
 
 
-
-
-
-
-
-exit(0)
-
-
