@@ -33,7 +33,7 @@ class QuickSort:
             self.quick_sort_in_place(arr, low, pi-1)
             self.quick_sort_in_place(arr, pi+1, high)
 
-    def quick_sort(self, array):
+    def quick_sort(self, array, odata = 0):
         n = len(array)
         self.quick_sort_in_place(array, 0, n-1)
         return array

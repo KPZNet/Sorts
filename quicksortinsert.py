@@ -26,13 +26,13 @@ class QuickSortInsertion:
         return j
 
     # Hybrid function -> Quick + Insertion sort
-    def hybrid_quick_sort_in_place(self, arr, low, high):
+    def hybrid_quick_sort_in_place(self, arr, low, high, partition_len):
         while low<high:
 
             # If the size of the array is less
             # than threshold apply insertion sort
             # and stop recursion
-            if high-low + 1<10:
+            if high-low + 1< partition_len:
                 self.hybrid_insertion_sort(arr, low, high)
                 break
 
@@ -46,16 +46,17 @@ class QuickSortInsertion:
                 # is less than right, sort left part
                 # and move to the right part of the array
                 if pivot-low<high-pivot:
-                    self.hybrid_quick_sort_in_place(arr, low, pivot-1)
+                    self.hybrid_quick_sort_in_place(arr, low, pivot-1, partition_len)
                     low = pivot + 1
                 else:
                     # If the right side of pivot is less
                     # than left, sort right side and
                     # move to the left side
-                    self.hybrid_quick_sort_in_place(arr, pivot + 1, high)
+                    self.hybrid_quick_sort_in_place(arr, pivot + 1, high, partition_len)
                     high = pivot-1
 
-    def hybrid_quick_sort(self, array):
+    def hybrid_quick_sort(self, array, odata=10):
         n = len(array)
-        self.hybrid_quick_sort_in_place(array, 0, n-1)
+        self.hybrid_quick_sort_in_place(array, 0, n-1, odata)
         return array
+

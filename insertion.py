@@ -3,7 +3,7 @@
 
 
 class InsertionSort:
-    def insertion_sort(self, array):
+    def insertion_sort(self, array, odata=0):
                     
         for i in range(1, len(array)):
             key_item = array[i]
