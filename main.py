@@ -72,15 +72,15 @@ class Sorter:
 
     def get_sort_comparisons_times(self, base_size, loop_size, num_averages):
         rand_arrays, array_sizes = self.make_random_arrays(base_size, loop_size)
-        #sorted_array_test_times_bubble = self.sort_run(s.bubble_sort, rand_arrays, num_averages)
-        #sorted_array_test_times_insert = self.sort_run(s.insertion_sort, rand_arrays, num_averages)
+        sorted_array_test_times_bubble = self.sort_run(s.bubble_sort, rand_arrays, num_averages)
+        sorted_array_test_times_insert = self.sort_run(s.insertion_sort, rand_arrays, num_averages)
         sorted_array_test_times_merge = self.sort_run(s.merge_sort, rand_arrays, num_averages)
         sorted_array_test_times_quick = self.sort_run(s.quick_sort, rand_arrays, num_averages)
         sorted_array_test_times_quick_hybrid = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages)
 
         sort_times_df = pd.DataFrame()
-        #sort_times_df['bubble'] = sorted_array_test_times_bubble
-        #sort_times_df['insert'] = sorted_array_test_times_insert
+        sort_times_df['bubble'] = sorted_array_test_times_bubble
+        sort_times_df['insert'] = sorted_array_test_times_insert
         sort_times_df['merge'] = sorted_array_test_times_merge
         sort_times_df['quick'] = sorted_array_test_times_quick
         sort_times_df['quick-insert'] = sorted_array_test_times_quick_hybrid
@@ -89,8 +89,8 @@ class Sorter:
         return sort_times_df
 
     def plot_sort_comparisons(self, sort_times_df):
-        #plt.plot(sort_times_df['array_sizes'], sort_times_df['bubble'], label='bubble', color='red')
-        #plt.plot(sort_times_df['array_sizes'], sort_times_df['insert'], label='insert', color='purple')
+        plt.plot(sort_times_df['array_sizes'], sort_times_df['bubble'], label='bubble', color='red')
+        plt.plot(sort_times_df['array_sizes'], sort_times_df['insert'], label='insert', color='purple')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['merge'], label='merge', color='steelblue')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['quick'], label='quick', color='orange')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['quick-insert'], label='quick + insert', color='green')
@@ -113,15 +113,13 @@ class Sorter:
         sorted_array_test_times_quick_hybrid_10 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,10)
         sorted_array_test_times_quick_hybrid_20 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,20)
         sorted_array_test_times_quick_hybrid_50 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,50)
-        #sorted_array_test_times_quick_hybrid_200 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,200)
-
+     
         sort_times_df = pd.DataFrame()
         sort_times_df['quick-sort'] = sorted_array_test_times_quick_sort
         sort_times_df['quick-insert-5'] = sorted_array_test_times_quick_hybrid_5
         sort_times_df['quick-insert-10'] = sorted_array_test_times_quick_hybrid_10
         sort_times_df['quick-insert-20'] = sorted_array_test_times_quick_hybrid_20
         sort_times_df['quick-insert-50'] = sorted_array_test_times_quick_hybrid_50
-        #sort_times_df['quick-insert-200'] = sorted_array_test_times_quick_hybrid_200
         sort_times_df['array_sizes'] = array_sizes
 
         return sort_times_df
@@ -134,7 +132,7 @@ class Sorter:
         plt.plot(df['array_sizes'], df['quick-insert-10'], label='part_10', color='orange')
         plt.plot(df['array_sizes'], df['quick-insert-20'], label='part_20', color='green')
         plt.plot(df['array_sizes'], df['quick-insert-50'], label='part_50', color='blue')
-        #plt.plot(df['array_sizes'], df['quick-insert-200'], label='part_200', color='magenta')
+
         plt.legend()
         plt.ylabel('Milliseconds')
         plt.xlabel('Array Size')
