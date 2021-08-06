@@ -1,0 +1,61 @@
+
+
+class QuickSortInsertion:
+    # Function to perform the insertion sort
+    def hybrid_insertion_sort(self, arr, low, n):
+        for i in range(low + 1, n + 1):
+            val = arr[i]
+            j = i
+            while j>low and arr[j-1]>val:
+                arr[j]= arr[j-1]
+                j-= 1
+            arr[j]= val
+
+    # The following two functions are used
+    # to perform quicksort hybrid on the array.
+
+    # Partition function for quicksort
+    def hybrid_partition(self, arr, low, high):
+        pivot = arr[high]
+        i = j = low
+        for i in range(low, high):
+            if arr[i]<pivot:
+                arr[i], arr[j]= arr[j], arr[i]
+                j+= 1
+        arr[j], arr[high]= arr[high], arr[j]
+        return j
+
+    # Hybrid function -> Quick + Insertion sort
+    def hybrid_quick_sort_in_place(self, arr, low, high):
+        while low<high:
+
+            # If the size of the array is less
+            # than threshold apply insertion sort
+            # and stop recursion
+            if high-low + 1<10:
+                self.hybrid_insertion_sort(arr, low, high)
+                break
+
+            else:
+                pivot = self.hybrid_partition(arr, low, high)
+
+                # Optimised quicksort which works on
+                # the smaller arrays first
+
+                # If the left side of the pivot
+                # is less than right, sort left part
+                # and move to the right part of the array
+                if pivot-low<high-pivot:
+                    self.hybrid_quick_sort_in_place(arr, low, pivot-1)
+                    low = pivot + 1
+                else:
+                    # If the right side of pivot is less
+                    # than left, sort right side and
+                    # move to the left side
+                    self.hybrid_quick_sort_in_place(arr, pivot + 1, high)
+                    high = pivot-1
+
+    def hybrid_quick_sort(self, array):
+        n = len(array)
+        self.hybrid_quick_sort_in_place(array, 0, n-1)
+        return array
