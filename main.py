@@ -25,26 +25,6 @@ class Sorter:
     def __init__(self):
         pass
 
-    def bubble_sort(self, array, odata) :
-        sorter = BubbleSort()
-        return sorter.bubble_sort(array, odata)
-
-    def merge_sort(self, array, odata) :
-        sorter = MergeSort()
-        return sorter.merge_sort(array, odata)
-
-    def insertion_sort(self, array, odata):
-        sorter = InsertionSort()
-        return sorter.insertion_sort(array, odata)
-
-    def quick_sort(self, array, odata):
-        sorter = QuickSort()
-        return sorter.quick_sort(array, odata)
-
-    def hybrid_quick_sort(self, array, odata):
-        sorter = QuickSortInsertion()
-        return sorter.hybrid_quick_sort(array, odata)
-
     def make_random_arrays(self, BASE_SIZE, LOOP_SIZE):
         array_sizes = []
         rand_arrays = []
@@ -55,14 +35,17 @@ class Sorter:
             rand_arrays.append(rand_array)
         return rand_arrays, array_sizes 
 
-    def sort_run(self, fn, rand_arrays, runs, odata=0):
+    def sort_run(self, fn, rand_arrays, runs, odata=None):
         sorted_array_test_times = []
         for rand_array in rand_arrays:
             run_list = []
             for j in range(runs):
                 rand_array_copy = rand_array.copy()
                 start_time = time.perf_counter_ns()
-                sorted_rand_array = fn(rand_array_copy, odata)
+                if odata != None:
+                    sorted_rand_array = fn.sort(rand_array_copy, odata)
+                else:
+                    sorted_rand_array = fn.sort( rand_array_copy )
                 stop_time = time.perf_counter_ns()
                 test_time = (stop_time - start_time) / NANO_TO_MS
                 run_list.append(test_time)
@@ -72,11 +55,11 @@ class Sorter:
 
     def get_sort_comparisons_times(self, base_size, loop_size, num_averages):
         rand_arrays, array_sizes = self.make_random_arrays(base_size, loop_size)
-        sorted_array_test_times_bubble = self.sort_run(s.bubble_sort, rand_arrays, num_averages)
-        sorted_array_test_times_insert = self.sort_run(s.insertion_sort, rand_arrays, num_averages)
-        sorted_array_test_times_merge = self.sort_run(s.merge_sort, rand_arrays, num_averages)
-        sorted_array_test_times_quick = self.sort_run(s.quick_sort, rand_arrays, num_averages)
-        sorted_array_test_times_quick_hybrid = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages)
+        sorted_array_test_times_bubble = self.sort_run(BubbleSort(), rand_arrays, num_averages)
+        sorted_array_test_times_insert = self.sort_run(InsertionSort(), rand_arrays, num_averages)
+        sorted_array_test_times_merge = self.sort_run(MergeSort(), rand_arrays, num_averages)
+        sorted_array_test_times_quick = self.sort_run(QuickSort(), rand_arrays, num_averages)
+        sorted_array_test_times_quick_hybrid = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages)
 
         sort_times_df = pd.DataFrame()
         sort_times_df['bubble'] = sorted_array_test_times_bubble
@@ -108,11 +91,11 @@ class Sorter:
         
         rand_arrays, array_sizes = self.make_random_arrays(base_size, loop_size)
         
-        sorted_array_test_times_quick_sort = self.sort_run(s.quick_sort, rand_arrays, num_averages)
-        sorted_array_test_times_quick_hybrid_5 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,5)
-        sorted_array_test_times_quick_hybrid_10 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,10)
-        sorted_array_test_times_quick_hybrid_20 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,20)
-        sorted_array_test_times_quick_hybrid_50 = self.sort_run(s.hybrid_quick_sort, rand_arrays, num_averages,50)
+        sorted_array_test_times_quick_sort = self.sort_run(QuickSort(), rand_arrays, num_averages)
+        sorted_array_test_times_quick_hybrid_5 = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages,5)
+        sorted_array_test_times_quick_hybrid_10 = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages,10)
+        sorted_array_test_times_quick_hybrid_20 = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages,20)
+        sorted_array_test_times_quick_hybrid_50 = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages,50)
      
         sort_times_df = pd.DataFrame()
         sort_times_df['quick-sort'] = sorted_array_test_times_quick_sort

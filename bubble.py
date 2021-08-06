@@ -2,7 +2,7 @@
 
 class BubbleSort:
 
-    def bubble_sort(self, array, odata=0) :
+    def sort(self, array) :
     
         n = len ( array )
         for i in range ( n ) :

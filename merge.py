@@ -25,10 +25,10 @@ class MergeSort:
                 break
         return result
 
-    def merge_sort(self, array, odata=0) :
+    def sort(self, array) :
         if len ( array ) < 2 :
             return array
         midpoint = len ( array ) // 2
         return self.merge (
-            left=  self.merge_sort ( array[:midpoint] , odata),
-            right= self.merge_sort ( array[midpoint :], odata ) )
+            left=  self.sort ( array[:midpoint] ),
+            right= self.sort ( array[midpoint :] ) )

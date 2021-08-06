@@ -55,7 +55,7 @@ class QuickSortInsertion:
                     self.hybrid_quick_sort_in_place(arr, pivot + 1, high, partition_len)
                     high = pivot-1
 
-    def hybrid_quick_sort(self, array, odata=10):
+    def sort(self, array, odata=10):
         n = len(array)
         self.hybrid_quick_sort_in_place(array, 0, n-1, odata)
         return array
