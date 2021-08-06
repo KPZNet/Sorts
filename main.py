@@ -103,21 +103,21 @@ sorted_array_test_times = []
 
 rand_arrays, array_sizes = make_random_arrays(BASE_SIZE, LOOP_SIZE)
 sorted_array_test_times_bubble = sort_run(s.bubble_sort, rand_arrays, NUM_AVERAGES)
-sorted_array_test_times_merge = sort_run(s.merge_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_insert = sort_run(s.insertion_sort, rand_arrays, NUM_AVERAGES)
+sorted_array_test_times_merge = sort_run(s.merge_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick = sort_run(s.quick_sort, rand_arrays, NUM_AVERAGES)
 sorted_array_test_times_quick_hybrid = sort_run(s.hybrid_quick_sort, rand_arrays, NUM_AVERAGES)
 
 sort_times_df = pd.DataFrame()
 sort_times_df['bubble'] = sorted_array_test_times_bubble
-sort_times_df['merge'] = sorted_array_test_times_merge
 sort_times_df['insert'] = sorted_array_test_times_insert
+sort_times_df['merge'] = sorted_array_test_times_merge
 sort_times_df['quick'] = sorted_array_test_times_quick
 sort_times_df['quick-insert'] = sorted_array_test_times_quick_hybrid
 
 plt.plot(array_sizes, sort_times_df['bubble'], label='bubble', color='red')
-plt.plot(array_sizes, sort_times_df['merge'], label='merge', color='steelblue')
 plt.plot(array_sizes, sort_times_df['insert'], label='insert', color='purple')
+plt.plot(array_sizes, sort_times_df['merge'], label='merge', color='steelblue')
 plt.plot(array_sizes, sort_times_df['quick'], label='quick', color='orange')
 plt.plot(array_sizes, sort_times_df['quick-insert'], label='quick + insert', color='green')
 plt.legend()
