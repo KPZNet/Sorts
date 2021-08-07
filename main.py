@@ -12,6 +12,7 @@ from merge import MergeSort
 from quicksortinsert import QuickSortInsertion
 from quicksort import QuickSort
 from quicksortmedian import QuickSortMedian
+from quicksortinsertmedian import QuickSortInsertionMedian
 
 NANO_TO_MS = 1000000
 
@@ -55,9 +56,9 @@ class Sorter:
         print("Generating random arrays...")
         rand_arrays, array_sizes = self.make_random_arrays(base_size, loop_size)
         print ("Bubble Sorting...")
-        sorted_array_test_times_bubble = self.sort_run(BubbleSort(), rand_arrays, num_averages)
+        #sorted_array_test_times_bubble = self.sort_run(BubbleSort(), rand_arrays, num_averages)
         print ( "Insertion Sorting..." )
-        sorted_array_test_times_insert = self.sort_run(InsertionSort(), rand_arrays, num_averages)
+        #sorted_array_test_times_insert = self.sort_run(InsertionSort(), rand_arrays, num_averages)
         print ( "Merge Sorting..." )
         sorted_array_test_times_merge = self.sort_run(MergeSort(), rand_arrays, num_averages)
         print ( "Quick Sorting..." )
@@ -66,25 +67,29 @@ class Sorter:
         sorted_array_test_times_quick_hybrid = self.sort_run(QuickSortInsertion(), rand_arrays, num_averages, 10)
         print ( "Quick Median Sorting..." )
         sorted_array_test_times_quick_median = self.sort_run(QuickSortMedian(), rand_arrays, num_averages)
+        print ( "Quick Insert Median Sorting..." )
+        sorted_array_test_times_quick_insert_median = self.sort_run(QuickSortInsertionMedian(), rand_arrays, num_averages, 10)
 
         sort_times_df = pd.DataFrame()
-        sort_times_df['bubble'] = sorted_array_test_times_bubble
-        sort_times_df['insert'] = sorted_array_test_times_insert
+        #sort_times_df['bubble'] = sorted_array_test_times_bubble
+        #sort_times_df['insert'] = sorted_array_test_times_insert
         sort_times_df['merge'] = sorted_array_test_times_merge
         sort_times_df['quick'] = sorted_array_test_times_quick
         sort_times_df['quick-insert'] = sorted_array_test_times_quick_hybrid
         sort_times_df['quick-median'] = sorted_array_test_times_quick_median
+        sort_times_df['quick-insert-median'] = sorted_array_test_times_quick_insert_median
         sort_times_df['array_sizes'] = array_sizes
 
         return sort_times_df
 
     def plot_sort_comparisons(self, sort_times_df):
-        plt.plot(sort_times_df['array_sizes'], sort_times_df['bubble'], label='bubble', color='red')
-        plt.plot(sort_times_df['array_sizes'], sort_times_df['insert'], label='insert', color='purple')
+        #plt.plot(sort_times_df['array_sizes'], sort_times_df['bubble'], label='bubble', color='red')
+        #plt.plot(sort_times_df['array_sizes'], sort_times_df['insert'], label='insert', color='purple')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['merge'], label='merge', color='steelblue')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['quick'], label='quick', color='orange')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['quick-insert'], label='quick + insert', color='green')
         plt.plot(sort_times_df['array_sizes'], sort_times_df['quick-median'], label='quick + median', color='magenta')
+        plt.plot(sort_times_df['array_sizes'], sort_times_df['quick-insert-median'], label='quick + insert + median', color='black')
         plt.legend()
         plt.ylabel('Milliseconds')
         plt.xlabel('Array Size')
@@ -132,8 +137,8 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-s.run_sort_comparison(700, 5, 5)
-s.run_quick_sort_comparison(1000, 5, 5)
+s.run_sort_comparison(10000, 5, 1)
+#s.run_quick_sort_comparison(1000, 5, 5)
 
 
 
