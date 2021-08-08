@@ -137,7 +137,7 @@ class Sorter:
 
 print("Sort Comparisons")
 s = Sorter()
-s.run_sort_comparison(10000, 5, 1)
+s.run_sort_comparison(10000, 10, 10)
 #s.run_quick_sort_comparison(1000, 5, 5)
 
 
